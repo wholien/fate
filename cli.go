@@ -1,4 +1,39 @@
 package main
 
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+
+	"github.com/wholien/go-yelp/yelp"
+)
+
 func main() {
+	// get config keys
+	var o yelp.AuthOptions
+	data, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(data, &o)
+	if err != nil {
+		panic(err)
+	}
+	
+	// new yelp client
+	client := yelp.New(&o, nil)
+	
+	// make phone search query
+	phone := os.Args[1]
+	results, err := client.PhoneSearch(phone)
+	if err != nil {
+		panic(err)
+	}
+	
+	fmt.Printf("\nFound a total of %v results for number %v.\n", results.Total, phone)
+	fmt.Println("-----------------------------")
+	for i := 0; i < len(results.Businesses); i++ {
+		fmt.Printf("%v\t\t%v\n", results.Businesses[i].Name, results.Businesses[i].Rating)
+	}
 }
