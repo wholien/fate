@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	ip, err := Query("http://ip-api.com/json")
+	fmt.Printf("%#v\n", ip)
 	// get config keys
 	var o yelp.AuthOptions
 	data, err := ioutil.ReadFile("config.json")
