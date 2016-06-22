@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"io/ioutil"
 )
 
 type Ip_response_success struct {
@@ -29,7 +27,6 @@ func Query(url string) (Ip_response_success, error) {
 	if err != nil {
 		return Ip_response_success{}, err
 	}
-	fmt.Printf("%#v\n", resp)
 
 	var ip_response Ip_response_success
 	defer resp.Body.Close()
@@ -37,7 +34,5 @@ func Query(url string) (Ip_response_success, error) {
 	if err != nil {
 		return Ip_response_success{}, err
 	}
-	body, err := ioutil.ReadAll(resp.Body)
-	fmt.Printf("%#v\n", string(body))
 	return ip_response, nil
 }
