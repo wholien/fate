@@ -15,6 +15,7 @@ func main() {
 		fmt.Printf("%#v\n", err)
 	}
 	fmt.Printf("%#v\n", ip)
+
 	//// get config keys
 	var o yelp.AuthOptions
 	data, err := ioutil.ReadFile("config.json")
