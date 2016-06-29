@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
 
 	"github.com/wholien/go-yelp/yelp"
+	"github.com/guregu/null"
 )
 
 func main() {
@@ -29,16 +29,32 @@ func main() {
 	
 	// new yelp client
 	client := yelp.New(&o, nil)
+
+	locationOptions := yelp.LocationOptions{
+		ip.Zip,
+		&yelp.CoordinateOptions{
+			Latitude: null.FloatFrom(ip.Lat),
+			Longitude: null.FloatFrom(ip.Lon),
+		},
+	}
+
+	generalOptions := yelp.GeneralOptions{
+		Term: "food",
+		RadiusFilter: null.FloatFrom(2000),
+	}
+
+	searchOptions := yelp.SearchOptions{
+		GeneralOptions: &generalOptions,
+		LocationOptions: &locationOptions,
+	}
 	
 	// make phone search query
-	number := os.Args[1]
-	phoneOptions := yelp.PhoneOptions{Phone: number}
-	results, err := client.PhoneSearch(phoneOptions)
+	results, err := client.DoSearch(searchOptions)
 	if err != nil {
 		fmt.Println(err)
 	}
 	
-	fmt.Printf("\nFound a total of %v results for number %v.\n", results.Total, number)
+	fmt.Printf("\nFound a total of %v results.\n", results.Total)
 	fmt.Println("-----------------------------")
 	for i := 0; i < len(results.Businesses); i++ {
 		fmt.Printf("%v\t\t%v\n", results.Businesses[i].Name, results.Businesses[i].Rating)
