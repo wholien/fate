@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 
 	"github.com/wholien/go-yelp/yelp"
-	"github.com/guregu/null"
 )
 
 func main() {
@@ -31,16 +30,11 @@ func main() {
 	client := yelp.New(&o, nil)
 
 	locationOptions := yelp.LocationOptions{
-		ip.Zip,
-		&yelp.CoordinateOptions{
-			Latitude: null.FloatFrom(ip.Lat),
-			Longitude: null.FloatFrom(ip.Lon),
-		},
+		Location: ip.Zip,
 	}
 
 	generalOptions := yelp.GeneralOptions{
 		Term: "food",
-		RadiusFilter: null.FloatFrom(2000),
 	}
 
 	searchOptions := yelp.SearchOptions{
